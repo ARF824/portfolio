@@ -48,7 +48,7 @@ align-items: center;
   padding: 40px;
 }
 
-@media(max-with:800px){
+@media(max-width:800px){
    .base .grid,
    .add-on .grid{
        grid-template-columns: minimax(0, 1fr);
