@@ -27,7 +27,7 @@ li{
   margin: 3px 0;
 }
 
-.head .contaner{
+.head .container{
 align-items: center;
   justify-content: space-between;
 }
@@ -49,6 +49,10 @@ align-items: center;
 }
 
 @media (max-width:800px){
+  .head {
+    height: 120px;
+  }
+
    .base .grid,
    .add-on .grid{
        grid-template-columns: minmax(0, 1fr);
