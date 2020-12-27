@@ -51,6 +51,6 @@ align-items: center;
 @media(max-with:800px){
    .base .grid,
    .add-on .grid{
-       grid-template-columns: minimax(0, 1fr)
+       grid-template-columns: minimax(0, 1fr);
    }
 }
