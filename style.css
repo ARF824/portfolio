@@ -1,0 +1,49 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body{
+  background-color: #f4f4f4;
+}
+
+h1,
+h2,
+p,
+li{
+  margin: 10px 0;
+}
+
+.head{
+  background: rgb(189, 4, 0);
+  color: white;
+  height: 100px;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+
+.head li{
+  margin: 3px 0;
+}
+
+.head .contaner{
+align-items: center;
+  justify-content: space-between;
+}
+
+.head ul{
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  justify-content: flex-end;
+}
+
+.container{
+  padding: 20px;
+}
+
+.card{
+  height: 100%;
+  padding: 40px;
+}
