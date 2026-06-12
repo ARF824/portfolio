@@ -442,6 +442,16 @@ ul {
   font-size: 0.85rem;
 }
 
+.footer-link {
+  color: var(--gray);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-link:hover {
+  color: var(--white);
+}
+
 /* ── Responsive ──────────────────────────────────── */
 @media (max-width: 900px) {
   .addons-grid {
