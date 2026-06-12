@@ -11,141 +11,196 @@
 </head>
 
 <body>
-  <header class="head">
-    <div class="container flex">
-    <div>
-    <h1>Create Networks</h1>
-    <p>Creative Work That Works</p>
+
+  <!-- Nav -->
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="logo">Create Networks</a>
+      <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#addons">Add-ons</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
     </div>
-    <ul>
-      <li>Phone number</li>
-      <li>email@gmail.com</li>
-      <li>mon-sat 8am to 6pm</li>
-    </ul>
-    </div>
-  </header>
-  <div class="base">
-    <div class="container grid">
-      <div class="card">
-        <h1>Static Website Design</h1>
-        <p>Static site designed using HTML, CSS, and Javascript.</p>
-        <ul>
-          <li>
-            <p>3 revisions</p>
-          </li>
-          <li>
-            <p>SEO 3 words for one month</p>
-          </li>
-          <li>
-            <p>Support Modern Browsers and Devices</p>
-          </li>
-          <li>
-            <p>Up to 8 pages</p>
-          </li>
-        </ul>
-        <h2>1 year License $500</h2>
-        <p>License to use design for a single domain name for one year. Layout may be used for other projects and a template will be made publicly available online.</p>
-        <h2>Proprietary Rights $1,000</h2>
-        <p>Own the code. Colors, layout, and assets will not be used to create templates for other projects.</p>
-      </div>
-      <div class="card">
-        <h1>Dynamic Website Design</h1>
-        <p>Dynamic site designed using HTML, CSS, and Javascript. Database architecture and design using adequate language (PHP, Ruby, Python, etc)</p>
-        <ul>
-          <li>
-            <p>3 revisions</p>
-          </li>
-          <li>
-            <p>SEO 3 words for one month</p>
-          </li>
-          <li>
-            <p>Support Modern Browsers and Devices</p>
-          </li>
-          <li>
-            <p>Up to 8 pages</p>
-          </li>
-        </ul>
-        <h2>1 year License $1,200</h2>
-        <p>License to use design for a single domain name for one year. Layout may be used for other projects and a template will be made publicly available online.</p>
-        <h2>Proprietary Rights $2,000</h2>
-        <p>Own the code. Colors, layout, and assets will not be used to create templates for other projects.</p>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <p class="eyebrow">Digital Agency</p>
+      <h1>Creative Work<br>That Works</h1>
+      <p class="hero-sub">We design, build, and grow your digital presence — from stunning websites to full marketing campaigns.</p>
+      <div class="hero-actions">
+        <a href="#services" class="btn btn-primary">See Our Services</a>
+        <a href="#contact" class="btn btn-ghost">Get in Touch</a>
       </div>
     </div>
+  </section>
 
-    <hr>
+  <!-- Services -->
+  <section id="services" class="section">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow red">What We Build</p>
+        <h2>Website Design Packages</h2>
+        <p class="section-sub">Professional websites designed to convert visitors into customers.</p>
+      </div>
+      <div class="pricing-grid">
 
-    <div class="add-on">
-      <div class="container grid">
-        <div class="card">
-          <h1>Basic Media Package + $350</h1>
-          <p>3 hours of photography or a single Logo design ($150 value)</p>
-          <p>SEO for 2 additional words for one month ($600 value)</p>
-          <p>Copywriting for up to 5 pages ($450 value)</p>
-          <p>Upload code to host of choice ($100 value)</p>
+        <div class="pricing-card">
+          <div class="pricing-badge">Starter</div>
+          <h3>Static Website</h3>
+          <p class="pricing-desc">Fast, responsive sites built with HTML, CSS, and JavaScript.</p>
+          <ul class="feature-list">
+            <li>3 revisions</li>
+            <li>SEO — 3 keywords for one month</li>
+            <li>Modern browser &amp; device support</li>
+            <li>Up to 8 pages</li>
+          </ul>
+          <div class="pricing-options">
+            <div class="pricing-option">
+              <span class="price">$500</span>
+              <span class="price-label">1-Year License</span>
+              <p>Use the design on a single domain for one year. Layout may be used as a public template.</p>
+            </div>
+            <div class="pricing-option highlight">
+              <span class="price">$1,000</span>
+              <span class="price-label">Proprietary Rights</span>
+              <p>Own the code outright. Colors, layout, and assets will never be reused or templated.</p>
+            </div>
+          </div>
         </div>
 
-        <div class="card">
-          <h1>Hosting and 3rd Party Services +$100</h1>
-          <p>Recommend, purchase, and setup ($180 value)</p>
+        <div class="pricing-card featured-card">
+          <div class="pricing-badge featured-badge">Most Popular</div>
+          <h3>Dynamic Website</h3>
+          <p class="pricing-desc">Full-stack sites with database architecture using PHP, Ruby, Python, and more.</p>
+          <ul class="feature-list">
+            <li>3 revisions</li>
+            <li>SEO — 3 keywords for one month</li>
+            <li>Modern browser &amp; device support</li>
+            <li>Up to 8 pages</li>
+          </ul>
+          <div class="pricing-options">
+            <div class="pricing-option">
+              <span class="price">$1,200</span>
+              <span class="price-label">1-Year License</span>
+              <p>Use the design on a single domain for one year. Layout may be used as a public template.</p>
+            </div>
+            <div class="pricing-option highlight">
+              <span class="price">$2,000</span>
+              <span class="price-label">Proprietary Rights</span>
+              <p>Own the code outright. Colors, layout, and assets will never be reused or templated.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Add-ons -->
+  <section id="addons" class="section section-dark">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow muted">Enhance Your Package</p>
+        <h2>Add-On Services</h2>
+        <p class="section-sub muted">Stack services to build your brand and grow faster.</p>
+      </div>
+      <div class="addons-grid">
+
+        <div class="addon-card">
+          <div class="addon-icon">&#128247;</div>
+          <h3>Basic Media Package <span class="addon-price">+$350</span></h3>
+          <ul>
+            <li>3 hours of photography or a single logo design <em>($150 value)</em></li>
+            <li>SEO — 2 additional keywords for one month <em>($600 value)</em></li>
+            <li>Copywriting for up to 5 pages <em>($450 value)</em></li>
+            <li>Upload code to host of choice <em>($100 value)</em></li>
+          </ul>
+        </div>
+
+        <div class="addon-card">
+          <div class="addon-icon">&#127760;</div>
+          <h3>Hosting &amp; 3rd Party Services <span class="addon-price">+$100</span></h3>
+          <p>Recommend, purchase, and setup <em>($180 value)</em></p>
           <ul>
             <li>Domain</li>
             <li>Hosting</li>
             <li>Repository</li>
-            <li>CDN (cloudfront)</li>
+            <li>CDN (CloudFront)</li>
             <li>Email</li>
             <li>Analytics</li>
           </ul>
         </div>
 
-        <div class="card">
-          <h1>Technical Support For One Year +$1,000 ($100 per month)</h1>
-          <p>Includes troubleshooting and debugging as well as management of 3rd party services acquired through Create Networks</p>
+        <div class="addon-card">
+          <div class="addon-icon">&#128295;</div>
+          <h3>Technical Support — 1 Year <span class="addon-price">+$1,000</span></h3>
+          <p class="addon-note">$100 / month</p>
+          <p>Troubleshooting, debugging, and management of all 3rd party services acquired through Create Networks.</p>
         </div>
 
-        <div class="card">
-          <h1>Social Media Management</h1>
-          <p>$300 per week per account</p>
+        <div class="addon-card">
+          <div class="addon-icon">&#128241;</div>
+          <h3>Social Media Management</h3>
           <ul>
-            <li>SEO 5 words</li>
-            <li>Instagram</li>
-            <li>Facebook</li>
-            <li>Twitter</li>
+            <li>SEO — 5 keywords</li>
+            <li>Instagram, Facebook &amp; Twitter</li>
+            <li><strong>$300 / week per account</strong></li>
+            <li><strong>$1,000 / week for all 4</strong> — saves $800/month</li>
           </ul>
-          <p>$1,000 per week for all 4 ($800 off per month)</p>
         </div>
 
-        <div class="card">
-          <h1>Content Creation</h1>
-          <p>Rank higher on search engines and increase customer engagement</p>
+        <div class="addon-card">
+          <div class="addon-icon">&#9997;</div>
+          <h3>Content Creation</h3>
+          <p>Rank higher and increase customer engagement.</p>
           <ul>
-            <li>2 Blog posts or Articles per week $200 weekly</li>
-            <li>3 hour photoshoots monthly plus image retouching $1,000 monthly</li>
-            <li>Promotional Video (animated or film) $1,000 each</li>
+            <li>2 blog posts or articles / week — $200/week</li>
+            <li>Monthly 3-hour photoshoot + retouching — $1,000/month</li>
+            <li>Promotional video (animated or film) — $1,000 each</li>
           </ul>
-          <p>Get all 3 for $2,500 per month</p>
+          <p class="addon-bundle">All 3 for $2,500 / month</p>
         </div>
 
-        <div class="card">
-          <h1>Analytics + $800 per month</h1>
-          <p>Employ the power of analytics to make data-based operation decisions</p>
+        <div class="addon-card">
+          <div class="addon-icon">&#128202;</div>
+          <h3>Analytics <span class="addon-price">+$800 / month</span></h3>
+          <p>Data-driven decisions powered by analytics.</p>
           <ul>
-            <li>Acquire software and deploy on website</li>
+            <li>Acquire &amp; deploy analytics software</li>
             <li>Maintain database</li>
             <li>1 free monthly report</li>
-            <li>$100 per additional reports</li>
+            <li>$100 per additional report</li>
           </ul>
         </div>
-
-
 
       </div>
     </div>
+  </section>
 
+  <!-- Contact CTA -->
+  <section id="contact" class="section cta-section">
+    <div class="container cta-inner">
+      <h2>Ready to build something great?</h2>
+      <p>Reach out and let's get started.</p>
+      <div class="contact-chips">
+        <span>Phone number</span>
+        <span>email@gmail.com</span>
+        <span>Mon&ndash;Sat, 8am&ndash;6pm</span>
+      </div>
+      <a href="mailto:email@gmail.com" class="btn btn-white">Contact Us</a>
+    </div>
+  </section>
 
-  </div>
-
-<footer class="head"><h1>CREATE NETWORKS</h1></footer>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span class="logo">Create Networks</span>
+      <p>&copy; 2026 Create Networks. All rights reserved.</p>
+    </div>
+  </footer>
 
 </body>
-
 </html>
