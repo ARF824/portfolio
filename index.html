@@ -252,14 +252,18 @@
       });
     });
 
-    // Fibonacci spiral
+    // Fibonacci spiral — pauses off-screen and on hidden tab; skips if reduced motion
     (function () {
       const canvas = document.getElementById('spiral-canvas');
       if (!canvas) return;
+
+      // Respect reduced motion: draw one static frame and stop
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
       const ctx = canvas.getContext('2d');
       const PHI  = 1.6180339887;
-      const STEP = Math.PI / 2; // one Fibonacci arc = quarter turn
-      const FADE_ARCS = 6;      // fade out over this many arcs
+      const STEP = Math.PI / 2;
+      const FADE_ARCS = 6;
 
       let W, H, cx, cy;
       function resize() {
@@ -273,19 +277,17 @@
 
       let drawn = 0;
       let last  = null;
+      let rafId = null;
 
-      function frame(ts) {
+      function drawFrame(ts) {
         if (!last) last = ts;
-        drawn += (ts - last) / 1000 * 0.75; // radians per second
+        drawn += (ts - last) / 1000 * 0.75;
         last = ts;
 
         ctx.clearRect(0, 0, W, H);
 
         const maxR = Math.min(W, H) * 0.46;
-        // Scale so the current tip always sits at maxR
         const BASE = maxR / Math.pow(PHI, drawn / STEP);
-
-        // Only draw the last ~14 arcs (the rest are too small to see)
         const sLast  = Math.floor(drawn / STEP);
         const sFirst = Math.max(0, sLast - 14);
 
@@ -294,11 +296,10 @@
           const t1 = Math.min((s + 1) * STEP, drawn);
           if (t0 >= t1) continue;
 
-          const age     = drawn - t0;
-          const fade    = Math.max(0, 1 - age / (FADE_ARCS * STEP));
+          const age      = drawn - t0;
+          const fade     = Math.max(0, 1 - age / (FADE_ARCS * STEP));
           const isNewest = s === sLast;
 
-          // Build path
           ctx.beginPath();
           const pts = isNewest ? 80 : 40;
           for (let i = 0; i <= pts; i++) {
@@ -323,7 +324,6 @@
           ctx.shadowBlur = 0;
         }
 
-        // Glowing tip dot
         const tipX = cx + maxR * Math.cos(drawn);
         const tipY = cy + maxR * Math.sin(drawn);
         ctx.beginPath();
@@ -334,10 +334,30 @@
         ctx.fill();
         ctx.shadowBlur = 0;
 
-        requestAnimationFrame(frame);
+        rafId = requestAnimationFrame(drawFrame);
       }
 
-      requestAnimationFrame(frame);
+      function start() { if (!rafId) { last = null; rafId = requestAnimationFrame(drawFrame); } }
+      function stop()  { if (rafId)  { cancelAnimationFrame(rafId); rafId = null; } }
+
+      if (reduceMotion) {
+        // Draw one static frame of the spiral then stop
+        drawn = Math.PI * 6;
+        drawFrame(0);
+        stop();
+      } else {
+        // Pause when hero scrolls off screen
+        const visObs = new IntersectionObserver(
+          (entries) => entries[0].isIntersecting ? start() : stop(),
+          { threshold: 0 }
+        );
+        visObs.observe(canvas);
+
+        // Pause when tab is hidden
+        document.addEventListener('visibilitychange', () => {
+          document.hidden ? stop() : start();
+        });
+      }
     })();
 
     // Button ripple
