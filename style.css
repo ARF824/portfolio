@@ -29,7 +29,8 @@ a { text-decoration: none; }
 ul { list-style: none; }
 
 /* ── Scroll Reveal ───────────────────────────────── */
-.reveal {
+/* hidden only when JS is running — no-JS users see content immediately */
+html.js .reveal {
   opacity: 0;
   transform: translateY(32px);
   transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
