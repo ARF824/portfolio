@@ -48,8 +48,8 @@
   <section class="hero">
     <canvas id="spiral-canvas" aria-hidden="true"></canvas>
     <div class="container hero-inner">
-      <p class="eyebrow">Digital Agency</p>
-      <h1>Creative Work<br>That Works</h1>
+      <p class="eyebrow">Full-Service Digital Agency</p>
+      <h1>Creative Work<br><span class="accent">That Works</span></h1>
       <p class="hero-sub">We design, build, and grow your digital presence — from stunning websites to full marketing campaigns.</p>
       <div class="hero-actions">
         <a href="#services" class="btn btn-primary">See Our Services</a>
@@ -217,7 +217,7 @@
   <section id="contact" class="section cta-section">
     <div class="container cta-inner">
       <h2 class="reveal">Ready to build something great?</h2>
-      <p class="reveal d1">Reach out and let's get started.</p>
+      <p class="reveal d1">Tell us about your project and let's get started.</p>
       <div class="contact-chips reveal d2">
         <span>Fernando Alvarez</span>
         <a href="tel:+19293353502">(929) 335-3502</a>
@@ -271,111 +271,166 @@
       });
     });
 
-    // Fibonacci spiral — pauses off-screen and on hidden tab; skips if reduced motion
+    // Golden (Fibonacci) spiral — animated hero asset.
+    // Built as true connected quarter-circle arcs. The seamless infinite zoom
+    // comes from the construction's self-similarity: scaling by PHI and rotating
+    // -90 deg about the pole maps the whole figure onto itself, so frame(p) and
+    // frame(p+1) are identical and the loop never seams. Pauses off-screen / on a
+    // hidden tab; draws a single static frame if the visitor prefers reduced motion.
     (function () {
       const canvas = document.getElementById('spiral-canvas');
       if (!canvas) return;
-
-      // Respect reduced motion: draw one static frame and stop
+      const ctx = canvas.getContext('2d');
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      const ctx = canvas.getContext('2d');
-      const PHI  = 1.6180339887;
-      const STEP = Math.PI / 2;
-      const FADE_ARCS = 6;
+      const PHI = (1 + Math.sqrt(5)) / 2;
+      const Q   = Math.PI / 2;                                 // quarter turn
+      const POLE_X = -0.7236067977, POLE_Y = 1.1708203932;     // fixed point of the build
 
-      let W, H, cx, cy;
+      // Precompute the spiral once in "spiral space". Each entry is a quarter
+      // circle; rotation + uniform scale keep circles circular, so each can be
+      // stroked with a single ctx.arc — crisp and cheap.
+      const ARCS = [];
+      (function build() {
+        let ox = 0, oy = 0, a = Q, r = 1;
+        for (let n = 0; n < 40; n++) {
+          ARCS.push({ ox, oy, r, a0: a, a1: a + Q });
+          const ex = ox + r * Math.cos(a + Q), ey = oy + r * Math.sin(a + Q);
+          const rn = r * PHI;
+          ox = ex + rn * Math.cos(a + Q);
+          oy = ey + rn * Math.sin(a + Q);
+          a += 3 * Q; r = rn;
+        }
+      })();
+
+      let W, Hc, cx, cy, diag, fit;
       function resize() {
-        W = canvas.width  = canvas.offsetWidth;
-        H = canvas.height = canvas.offsetHeight;
-        cx = W / 2;
-        cy = H / 2;
+        W  = canvas.width  = canvas.offsetWidth;
+        Hc = canvas.height = canvas.offsetHeight;
+        cx = W * 0.68; cy = Hc * 0.56;   // pole off-center: keeps the core glow off the headline
+        diag = Math.hypot(W, Hc);
+        fit  = (diag * 0.34) / Math.pow(PHI, 18);    // a mid arc ~fills the view; arms bleed off
       }
       resize();
       window.addEventListener('resize', resize);
 
-      let drawn = 0;
-      let last  = null;
-      let rafId = null;
+      const smooth = (e0, e1, x) => {
+        const t = Math.max(0, Math.min(1, (x - e0) / (e1 - e0)));
+        return t * t * (3 - 2 * t);
+      };
 
-      function drawFrame(ts) {
-        if (!last) last = ts;
-        drawn += (ts - last) / 1000 * 0.75;
-        last = ts;
+      let phase = 0, last = null, rafId = null;
 
-        ctx.clearRect(0, 0, W, H);
+      function render(p) {
+        const Sg = fit * Math.pow(PHI, p);           // global scale (zoom)
+        const Rg = -Q * p;                           // global rotation
+        const cR = Math.cos(Rg), sR = Math.sin(Rg);
+        const TX = (x, y) => [
+          cx + Sg * ((x - POLE_X) * cR - (y - POLE_Y) * sR),
+          cy + Sg * ((x - POLE_X) * sR + (y - POLE_Y) * cR)
+        ];
 
-        const maxR = Math.min(W, H) * 0.46;
-        const BASE = maxR / Math.pow(PHI, drawn / STEP);
-        const sLast  = Math.floor(drawn / STEP);
-        const sFirst = Math.max(0, sLast - 14);
+        ctx.clearRect(0, 0, W, Hc);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
 
-        for (let s = sFirst; s <= sLast; s++) {
-          const t0 = s * STEP;
-          const t1 = Math.min((s + 1) * STEP, drawn);
-          if (t0 >= t1) continue;
+        const pole = TX(POLE_X, POLE_Y);
 
-          const age      = drawn - t0;
-          const fade     = Math.max(0, 1 - age / (FADE_ARCS * STEP));
-          const isNewest = s === sLast;
+        // Glowing core at the pole — the spiral appears to emerge from here.
+        const core = ctx.createRadialGradient(pole[0], pole[1], 0, pole[0], pole[1], diag * 0.18);
+        core.addColorStop(0,   'rgba(189,4,0,0.45)');
+        core.addColorStop(0.5, 'rgba(140,3,0,0.12)');
+        core.addColorStop(1,   'rgba(120,0,0,0)');
+        ctx.fillStyle = core;
+        ctx.beginPath(); ctx.arc(pole[0], pole[1], diag * 0.18, 0, Math.PI * 2); ctx.fill();
 
+        // Faint Fibonacci squares — the golden-rectangle scaffold.
+        for (const A of ARCS) {
+          const rpx = Sg * A.r;
+          if (rpx < 48 || rpx > 0.6 * diag) continue;
+          const al = smooth(48, 130, rpx) * (1 - smooth(0.4 * diag, 0.6 * diag, rpx)) * 0.08;
+          if (al <= 0.002) continue;
+          const c0 = TX(A.ox, A.oy);
+          const c1 = TX(A.ox + A.r * Math.cos(A.a0),     A.oy + A.r * Math.sin(A.a0));
+          const c3 = TX(A.ox + A.r * Math.cos(A.a0 + Q), A.oy + A.r * Math.sin(A.a0 + Q));
+          const c2 = [c1[0] + c3[0] - c0[0], c1[1] + c3[1] - c0[1]];
           ctx.beginPath();
-          const pts = isNewest ? 80 : 40;
-          for (let i = 0; i <= pts; i++) {
-            const t = t0 + (t1 - t0) * (i / pts);
-            const r = BASE * Math.pow(PHI, t / STEP);
-            const x = cx + r * Math.cos(t);
-            const y = cy + r * Math.sin(t);
-            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-          }
-
-          if (isNewest) {
-            ctx.shadowColor = 'rgba(255, 90, 60, 0.9)';
-            ctx.shadowBlur  = 14;
-            ctx.strokeStyle = `rgba(255, 190, 170, ${fade})`;
-            ctx.lineWidth   = 1.8;
-          } else {
-            ctx.shadowBlur  = 0;
-            ctx.strokeStyle = `rgba(255, 255, 255, ${fade * 0.45})`;
-            ctx.lineWidth   = Math.max(0.3, 1.4 * fade);
-          }
+          ctx.moveTo(c0[0], c0[1]); ctx.lineTo(c1[0], c1[1]);
+          ctx.lineTo(c2[0], c2[1]); ctx.lineTo(c3[0], c3[1]); ctx.closePath();
+          ctx.lineWidth = 1; ctx.shadowBlur = 0;
+          ctx.strokeStyle = 'rgba(255,255,255,' + al + ')';
           ctx.stroke();
-          ctx.shadowBlur = 0;
         }
 
-        const tipX = cx + maxR * Math.cos(drawn);
-        const tipY = cy + maxR * Math.sin(drawn);
-        ctx.beginPath();
-        ctx.arc(tipX, tipY, 3.5, 0, Math.PI * 2);
-        ctx.fillStyle   = 'rgba(255, 160, 130, 0.95)';
-        ctx.shadowColor = 'rgba(255, 80, 50, 1)';
-        ctx.shadowBlur  = 18;
-        ctx.fill();
-        ctx.shadowBlur = 0;
+        // The spiral itself — additive blending gives a soft neon bloom on dark.
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
 
-        rafId = requestAnimationFrame(drawFrame);
+        // Choose an on-screen arc to carry the bright "comet" head.
+        let comet = null, cometBest = Infinity;
+        for (const A of ARCS) {
+          const rpx = Sg * A.r;
+          if (rpx < 6 || rpx > diag) continue;
+          const d = Math.abs(rpx - 0.5 * diag);
+          if (d < cometBest) { cometBest = d; comet = A; }
+        }
+
+        for (const A of ARCS) {
+          const rpx = Sg * A.r;
+          if (rpx < 1.5 || rpx > 2.0 * diag) continue;
+          const alpha = smooth(2, 44, rpx) * (1 - smooth(0.95 * diag, 1.9 * diag, rpx));
+          if (alpha <= 0.01) continue;
+          const tt  = smooth(0, 0.55 * diag, rpx);   // 0 inner .. 1 outer
+          const ctr = TX(A.ox, A.oy);
+          const isComet = A === comet;
+          const g = Math.round(8 + 64 * tt);
+          const b = Math.round(4 + 44 * tt);
+          ctx.strokeStyle = 'rgba(' + Math.round(150 + 105 * tt) + ',' + g + ',' + b + ',' + alpha + ')';
+          ctx.lineWidth   = 1 + 2.4 * tt + (isComet ? 1.2 : 0);
+          ctx.shadowColor = 'rgba(255,60,35,0.9)';
+          ctx.shadowBlur  = (6 + 14 * tt) * (isComet ? 1.6 : 1);
+          ctx.beginPath();
+          ctx.arc(ctr[0], ctr[1], rpx, A.a0 + Rg, A.a1 + Rg, false);
+          ctx.stroke();
+        }
+
+        // Comet head — a white-hot point riding the leading edge.
+        if (comet) {
+          const e = TX(comet.ox + comet.r * Math.cos(comet.a1), comet.oy + comet.r * Math.sin(comet.a1));
+          const gr = ctx.createRadialGradient(e[0], e[1], 0, e[0], e[1], 18);
+          gr.addColorStop(0,    'rgba(255,245,240,0.95)');
+          gr.addColorStop(0.35, 'rgba(255,90,55,0.8)');
+          gr.addColorStop(1,    'rgba(255,60,40,0)');
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = gr;
+          ctx.beginPath(); ctx.arc(e[0], e[1], 18, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = 'rgba(255,255,255,0.95)';
+          ctx.beginPath(); ctx.arc(e[0], e[1], 2.3, 0, Math.PI * 2); ctx.fill();
+        }
+
+        ctx.restore();
+        ctx.shadowBlur = 0;
       }
 
-      function start() { if (!rafId) { last = null; rafId = requestAnimationFrame(drawFrame); } }
-      function stop()  { if (rafId)  { cancelAnimationFrame(rafId); rafId = null; } }
+      function loop(ts) {
+        if (last === null) last = ts;
+        phase += (ts - last) / 1000 * 0.07;   // ~14s per self-similar cycle
+        last = ts;
+        if (phase >= 1) phase -= 1;            // seamless wrap: frame(p) === frame(p+1)
+        render(phase);
+        rafId = requestAnimationFrame(loop);
+      }
+      function start() { if (!rafId) { last = null; rafId = requestAnimationFrame(loop); } }
+      function stop()  { if (rafId) { cancelAnimationFrame(rafId); rafId = null; } }
 
       if (reduceMotion) {
-        // Draw one static frame of the spiral then stop
-        drawn = Math.PI * 6;
-        drawFrame(0);
-        stop();
+        render(0);
       } else {
-        // Pause when hero scrolls off screen
-        const visObs = new IntersectionObserver(
-          (entries) => entries[0].isIntersecting ? start() : stop(),
+        new IntersectionObserver(
+          (es) => es[0].isIntersecting ? start() : stop(),
           { threshold: 0 }
-        );
-        visObs.observe(canvas);
-
-        // Pause when tab is hidden
-        document.addEventListener('visibilitychange', () => {
-          document.hidden ? stop() : start();
-        });
+        ).observe(canvas);
+        document.addEventListener('visibilitychange', () => { document.hidden ? stop() : start(); });
       }
     })();
 

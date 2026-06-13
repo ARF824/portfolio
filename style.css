@@ -176,6 +176,18 @@ html.js .reveal.visible { opacity: 1; transform: none; }
   text-shadow: 0 2px 40px rgba(0, 0, 0, 0.5);
 }
 
+/* red gradient accent on the second line — fallback solid for old browsers */
+.hero h1 .accent { color: #ff5630; }
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero h1 .accent {
+    background: linear-gradient(90deg, #ff6a4d, #bd0400);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
 .hero-sub {
   font-size: 1.15rem;
   color: var(--gray-light);
@@ -253,6 +265,10 @@ html.js .reveal.visible { opacity: 1; transform: none; }
 /* ── Sections ────────────────────────────────────── */
 .section { padding: 90px 20px; }
 
+/* utilities.css sets ".container { overflow: auto }", which clips the featured
+   card's glow. style.css loads on this page only, so lift the clip for sections. */
+.section .container { overflow: visible; }
+
 .section-dark {
   background: linear-gradient(-45deg, #0f172a, #1a0505, #111827, #200606);
   background-size: 400% 400%;
@@ -293,6 +309,8 @@ html.js .reveal.visible { opacity: 1; transform: none; }
   max-width: 900px;
   margin: 0 auto;
   perspective: 1200px;
+  /* breathing room so the featured card's glow is never visually cut off */
+  padding: 16px 8px 44px;
 }
 
 .pricing-card {
@@ -334,8 +352,8 @@ html.js .reveal.visible { opacity: 1; transform: none; }
 }
 
 @keyframes borderGlow {
-  0%, 100% { box-shadow: 0 0 0 2px var(--primary), 0 8px 30px rgba(189,4,0,0.15), 0 30px 60px rgba(189,4,0,0.08); }
-  50%       { box-shadow: 0 0 0 2px var(--primary), 0 8px 40px rgba(189,4,0,0.35), 0 30px 60px rgba(189,4,0,0.14); }
+  0%, 100% { box-shadow: 0 0 0 2px var(--primary), 0 0 28px rgba(189,4,0,0.22), 0 18px 44px rgba(189,4,0,0.16); }
+  50%       { box-shadow: 0 0 0 2px var(--primary), 0 0 46px rgba(189,4,0,0.42), 0 22px 54px rgba(189,4,0,0.26); }
 }
 
 .featured-card {
@@ -418,8 +436,9 @@ html.js .reveal.visible { opacity: 1; transform: none; }
 .pricing-option:hover { transform: translateX(4px); }
 
 .pricing-option.highlight {
-  background: #fff1f1;
-  border: 1px solid #fecaca;
+  background: #fff5f3;
+  border: 1px solid #f6cfc9;
+  border-left: 3px solid var(--primary);
 }
 
 .price {
