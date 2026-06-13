@@ -281,7 +281,7 @@ html.js .reveal {
   margin-bottom: 0.6rem;
 }
 
-.section-sub { color: var(--gray); font-size: 1.05rem; }
+.section-sub { color: #4b5563; font-size: 1.05rem; }
 .section-sub.muted { color: var(--gray-light); }
 
 /* ── Pricing ─────────────────────────────────────── */
@@ -572,6 +572,20 @@ html.js .reveal {
   transition: background 0.2s, transform 0.2s;
 }
 .contact-chips span:hover {
+  background: rgba(0, 0, 0, 0.28);
+  transform: translateY(-2px);
+}
+.contact-chips a {
+  background: rgba(0, 0, 0, 0.15);
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  color: inherit;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s, transform 0.2s;
+  text-decoration: none;
+}
+.contact-chips a:hover {
   background: rgba(0, 0, 0, 0.28);
   transform: translateY(-2px);
 }
