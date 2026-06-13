@@ -609,6 +609,25 @@ html.js .reveal {
   .footer-inner { flex-direction: column; gap: 8px; text-align: center; }
 }
 
+/* ── Focus visible ───────────────────────────────── */
+/* Default ring for light backgrounds */
+a:focus-visible,
+.btn:focus-visible,
+.nav-links a:focus-visible,
+.footer-link:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+/* White ring on dark/red backgrounds where brand red would be invisible */
+.btn-ghost:focus-visible,
+.btn-white:focus-visible,
+.contact-chips a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
 /* ── Reduced motion ──────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
